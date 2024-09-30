@@ -1,4 +1,4 @@
-require("../config/db").connect();
+require("../config/db.config").connect();
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
