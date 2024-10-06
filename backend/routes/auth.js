@@ -13,7 +13,7 @@ const {
 // User registration
 router.post("/register", async (req, res) => {
   try {
-    const { username, password, role } = req.body;
+    const { username, password, email, role } = req.body;
     const roles = ["user", "writer", "admin"];
     const existingRole = roles.includes(role);
 
@@ -32,6 +32,7 @@ router.post("/register", async (req, res) => {
 
     const user = await User.create({
       username,
+      email,
       role,
       password: hashedPassword,
     });
