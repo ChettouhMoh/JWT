@@ -16,6 +16,10 @@ import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
 import getSignUpTheme from "./theme/getSignUpTheme";
 import { GoogleIcon, FacebookIcon } from "./CustomIcons";
 import TemplateFrame from "./TemplateFrame";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { registerUser } from "../../rtk/slices/user-reducer";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -62,6 +66,15 @@ export default function SignUp() {
   const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
+  const [credentials, setCredentials] = useState({
+    username: "",
+    password: "",
+    role: "user",
+    email: "",
+  });
+  const dispatch = useDispatch();
+  const { loading, error, user } = useSelector((state) => state.auth);
+
   // This code only runs on the client side, to determine the system color preference
   React.useEffect(() => {
     // Check if there is a preferred mode in localStorage
@@ -112,7 +125,7 @@ export default function SignUp() {
       setPasswordErrorMessage("");
     }
 
-    if (!name.value || name.value.length < 1) {
+    if (!name.value || !/^[A-Za-z]{2,15} [A-Za-z]{2,15}$/.test(name.value)) {
       setNameError(true);
       setNameErrorMessage("Name is required.");
       isValid = false;
@@ -125,17 +138,11 @@ export default function SignUp() {
   };
 
   const handleSubmit = (event) => {
+    event.preventDefault();
     if (nameError || emailError || passwordError) {
-      event.preventDefault();
       return;
     }
-    const data = new FormData(event.currentTarget);
-    console.log({
-      name: data.get("name"),
-      lastName: data.get("lastName"),
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    dispatch(registerUser(credentials));
   };
 
   return (
@@ -174,6 +181,12 @@ export default function SignUp() {
                   error={nameError}
                   helperText={nameErrorMessage}
                   color={nameError ? "error" : "primary"}
+                  onChange={(e) => {
+                    setCredentials({
+                      ...credentials,
+                      username: e.target.value,
+                    });
+                  }}
                 />
               </FormControl>
               <FormControl>
@@ -189,6 +202,9 @@ export default function SignUp() {
                   error={emailError}
                   helperText={emailErrorMessage}
                   color={passwordError ? "error" : "primary"}
+                  onChange={(e) => {
+                    setCredentials({ ...credentials, email: e.target.value });
+                  }}
                 />
               </FormControl>
               <FormControl>
@@ -205,20 +221,30 @@ export default function SignUp() {
                   error={passwordError}
                   helperText={passwordErrorMessage}
                   color={passwordError ? "error" : "primary"}
+                  onChange={(e) => {
+                    setCredentials({
+                      ...credentials,
+                      password: e.target.value,
+                    });
+                  }}
                 />
               </FormControl>
               <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" color="primary" />}
                 label="I want to receive updates via email."
               />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                onClick={validateInputs}
-              >
-                Sign up
-              </Button>
+              {loading ? (
+                <LoadingButton loading variant="outlined" />
+              ) : (
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  onClick={validateInputs}
+                >
+                  Sign up
+                </Button>
+              )}
               <Typography sx={{ textAlign: "center" }}>
                 Already have an account?{" "}
                 <span>
