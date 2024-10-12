@@ -14,18 +14,17 @@ const {
 router.post("/register", async (req, res) => {
   try {
     const { username, password, email, role } = req.body;
-    const roles = ["user", "writer", "admin"];
-    const existingRole = roles.includes(role);
-
-    if (!existingRole) {
-      // check if given role is valid role
-      return res.status(400).json({ error: "given role is not a valid one !" });
-    }
 
     // Check if the username already exists in the database
     const existingUser = await User.findOne({ username });
     if (existingUser) {
       return res.status(400).json({ error: "Username already exists" });
+    }
+
+    // Check if the email already used before
+    const existingEmail = await User.findOne({ email });
+    if (existingEmail) {
+      return res.status(400).json({ error: "email already used before" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -60,8 +59,8 @@ router.post("/register", async (req, res) => {
 // User login
 router.post("/login", async (req, res) => {
   try {
-    const { username, password } = req.body;
-    const user = await User.findOne({ username });
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ error: "Authentication failed" });
     }
