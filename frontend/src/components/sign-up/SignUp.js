@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../../rtk/slices/user-reducer";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useNavigate } from "react-router-dom";
+import Alert from "../Alert";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -146,8 +147,10 @@ export default function SignUp() {
     }
     try {
       await dispatch(registerUser(credentials));
-      navigate("/desired-path");
-    } catch (error) {}
+    } catch (error) {
+      console.error(`Error: ${error}`);
+    }
+    // navigate("/");
   };
 
   return (
@@ -284,6 +287,9 @@ export default function SignUp() {
                 Sign up with Facebook
               </Button>
             </Box>
+            {error && (
+              <Alert severity="error" title="Error: " message={error.error} />
+            )}
           </Card>
         </SignUpContainer>
       </ThemeProvider>

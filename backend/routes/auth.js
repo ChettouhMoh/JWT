@@ -53,7 +53,6 @@ router.post("/register", async (req, res) => {
       accessToken,
     });
   } catch (err) {
-    console.error("Registration failed:", err);
     res.status(500).json({ error: "registeration failed" });
   }
 });

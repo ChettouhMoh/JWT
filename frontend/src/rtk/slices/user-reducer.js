@@ -59,7 +59,7 @@ const authSlice = createSlice({
     });
     builder.addCase(registerUser.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.payload || "Registration failed";
+      state.error = action.payload || { error: "Registration failed" };
     });
 
     // Login
