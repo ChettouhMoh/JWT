@@ -114,11 +114,14 @@ export default function SignIn(props) {
       return;
     }
     try {
-      await dispatch(loginUser(credentials));
+      const res = await dispatch(loginUser(credentials));
+      console.log("response", res);
+      if (res.type === "auth/loginUser/fulfilled") {
+        navigate("/");
+      }
     } catch (error) {
       console.error(`Error: ${error}`);
     }
-    // navigate("/");
   };
 
   const validateInputs = () => {

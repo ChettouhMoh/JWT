@@ -146,11 +146,13 @@ export default function SignUp() {
       return;
     }
     try {
-      await dispatch(registerUser(credentials));
+      const res = await dispatch(registerUser(credentials));
+      if (res.type === "auth/registerUser/fulfilled") {
+        navigate("/");
+      }
     } catch (error) {
       console.error(`Error: ${error}`);
     }
-    // navigate("/");
   };
 
   return (
