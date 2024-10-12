@@ -115,7 +115,6 @@ export default function SignIn(props) {
     }
     try {
       const res = await dispatch(loginUser(credentials));
-      console.log("response", res);
       if (res.type === "auth/loginUser/fulfilled") {
         navigate("/");
       }
