@@ -257,7 +257,7 @@ export default function SignUp() {
                 Already have an account?{" "}
                 <span>
                   <Link
-                    href="/material-ui/getting-started/templates/sign-in/"
+                    href="/signin"
                     variant="body2"
                     sx={{ alignSelf: "center" }}
                   >
