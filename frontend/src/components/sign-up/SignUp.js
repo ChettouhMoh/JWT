@@ -20,6 +20,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../../rtk/slices/user-reducer";
 import LoadingButton from "@mui/lab/LoadingButton";
+import { useNavigate } from "react-router-dom";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -73,6 +74,7 @@ export default function SignUp() {
     email: "",
   });
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { loading, error, user } = useSelector((state) => state.auth);
 
   // This code only runs on the client side, to determine the system color preference
@@ -137,12 +139,15 @@ export default function SignUp() {
     return isValid;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (nameError || emailError || passwordError) {
       return;
     }
-    dispatch(registerUser(credentials));
+    try {
+      await dispatch(registerUser(credentials));
+      navigate("/desired-path");
+    } catch (error) {}
   };
 
   return (

@@ -1,12 +1,5 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "../../api/axios";
-
-const initialState = {
-  user: null,
-  loading: false,
-  error: null,
-  accessToken: null,
-};
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 // Register thunk
 export const registerUser = createAsyncThunk(
@@ -14,7 +7,7 @@ export const registerUser = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const response = await axios.post("/auth/register", { ...userData });
-      return response.data; // Assuming the response includes the user data and access token
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -27,12 +20,19 @@ export const loginUser = createAsyncThunk(
   async (credentials, { rejectWithValue }) => {
     try {
       const response = await axios.post("/auth/login", credentials);
-      return response.data; // Assuming the response includes the user data and access token
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
   }
 );
+
+const initialState = {
+  user: null,
+  loading: false,
+  error: null,
+  accessToken: null,
+};
 
 const authSlice = createSlice({
   name: "auth",
@@ -41,6 +41,9 @@ const authSlice = createSlice({
     logout: (state) => {
       state.user = null;
       state.accessToken = null;
+    },
+    updateAccessToken: (state, action) => {
+      state.accessToken = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -78,20 +81,3 @@ const authSlice = createSlice({
 
 export const { logout } = authSlice.actions;
 export default authSlice.reducer;
-
-// export const userReducer = createSlice({
-//   initialState,
-//   name: "userReducer",
-//   reducers: {
-//     updateUser: (state, action) => {
-//       return state - action.payload;
-//     },
-//     deposite: (state, action) => {
-//       return state + action.payload;
-//     },
-//   },
-// });
-
-// export const { updateUser, deposite } = userReducer.actions;
-
-// export default userReducer.reducer;

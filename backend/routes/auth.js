@@ -44,9 +44,13 @@ router.post("/register", async (req, res) => {
       refreshToken,
     });
 
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true, // Prevents JavaScript access
+      secure: process.env.NODE_ENV === "production", // Ensures cookies are sent over HTTPS in production
+      sameSite: "Strict", // Helps mitigate CSRF attacks
+    });
     res.status(201).json({
       accessToken,
-      refreshToken,
     });
   } catch (err) {
     console.error("Registration failed:", err);
@@ -69,19 +73,17 @@ router.post("/login", async (req, res) => {
 
     const accessToken = generateAccessToken({ userId: user._id });
     const refreshToken = generateRefreshToken({ userId: user._id });
-
     await RefreshToken.create({ userId: user._id, refreshToken });
-    res.status(200).json({ accessToken, refreshToken });
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
+    });
+    res.status(200).json({ accessToken });
   } catch (error) {
     res.status(500).json({ error: "Login failed" });
   }
-});
-
-// delete refresh token when user logout
-router.post("/logout", async (req, res) => {
-  const refreshToken = req.cookies.refreshToken;
-  await RefreshToken.deleteOne({ refreshToken });
-  res.sendStatus(204);
 });
 
 router.post("/refreshTok", async (req, res) => {
@@ -94,7 +96,6 @@ router.post("/refreshTok", async (req, res) => {
 
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
       if (err) return res.sendStatus(403); // Forbidden
-
       // Issue a new access token
       const accessToken = generateAccessToken({ userId: user._id });
       res.json({ accessToken });
