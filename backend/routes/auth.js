@@ -49,6 +49,16 @@ router.post("/register", async (req, res) => {
       sameSite: "Strict", // Helps mitigate CSRF attacks
     });
     res.status(201).json({
+      user: {
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+        followers: user.followers,
+        following: user.following,
+        blogs: user.blogs,
+        createdAt: user.createdAt,
+      },
       accessToken,
     });
   } catch (err) {
@@ -61,6 +71,8 @@ router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
+    console.log(user);
+
     if (!user) {
       return res.status(401).json({ error: "Authentication failed" });
     }
@@ -78,7 +90,19 @@ router.post("/login", async (req, res) => {
       secure: process.env.NODE_ENV === "production",
       sameSite: "Strict",
     });
-    res.status(200).json({ accessToken });
+    res.status(200).json({
+      user: {
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+        followers: user.followers,
+        following: user.following,
+        blogs: user.blogs,
+        createdAt: user.createdAt,
+      },
+      accessToken,
+    });
   } catch (error) {
     res.status(500).json({ error: "Login failed" });
   }
