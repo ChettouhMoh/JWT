@@ -14,8 +14,13 @@ import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
-import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlined";
 import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Avatar from "@mui/material/Avatar";
+import { Stack } from "@mui/material";
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: "flex",
@@ -32,7 +37,10 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 }));
 
 export default function AppAppBar() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { loading, error, user } = useSelector((state) => state.auth);
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
@@ -93,17 +101,102 @@ export default function AppAppBar() {
               alignItems: "center",
             }}
           >
-            <Button color="primary" variant="text" size="small">
-              Sign in
-            </Button>
-            <Button color="primary" variant="contained" size="small">
-              Sign up
-            </Button>
+            {user ? (
+              <>
+                <Button
+                  variant="text"
+                  color="info"
+                  size="small"
+                  sx={{ minWidth: 0 }}
+                >
+                  Mohamed, C
+                </Button>
+                <Link to="/profile" style={{ textDecoration: "none" }}>
+                  <Avatar
+                    alt={user.username}
+                    src=""
+                    sx={{
+                      width: 36,
+                      height: 36,
+                      transition: "box-shadow 0.3s ease-in-out",
+                      "&:hover": {
+                        boxShadow: (theme) =>
+                          `0 2px 14px ${
+                            theme.palette.mode === "dark"
+                              ? "rgba(255, 255, 255, 0.2)"
+                              : "rgba(0, 0, 0, 0.2)"
+                          }`,
+                      },
+                    }}
+                  />
+                </Link>
+              </>
+            ) : (
+              <>
+                <Button
+                  component={Link}
+                  to="/signin"
+                  color="primary"
+                  variant="text"
+                  size="small"
+                >
+                  Sign in
+                </Button>
+                <Button
+                  component={Link}
+                  to="/signup"
+                  color="primary"
+                  variant="contained"
+                  size="small"
+                >
+                  Sign up
+                </Button>
+              </>
+            )}
           </Box>
-          <Box sx={{ display: { sm: "flex", md: "none" } }}>
+
+          <Box
+            sx={{
+              display: {
+                sm: "flex",
+                md: "none",
+              },
+              width: "100%",
+              justifyContent: "space-between",
+            }}
+          >
             <IconButton aria-label="Menu button" onClick={toggleDrawer(true)}>
               <MenuIcon />
             </IconButton>
+            <Stack direction="row" spacing={2}>
+              <Button
+                variant="text"
+                color="info"
+                size="small"
+                sx={{ minWidth: 0 }}
+              >
+                Mohamed, C
+              </Button>
+              <Link to="/profile" style={{ textDecoration: "none" }}>
+                <Avatar
+                  alt={user.username}
+                  src=""
+                  sx={{
+                    width: 36,
+                    height: 36,
+                    transition: "box-shadow 0.3s ease-in-out",
+                    "&:hover": {
+                      boxShadow: (theme) =>
+                        `0 2px 14px ${
+                          theme.palette.mode === "dark"
+                            ? "rgba(255, 255, 255, 0.2)"
+                            : "rgba(0, 0, 0, 0.2)"
+                        }`,
+                    },
+                  }}
+                />
+              </Link>
+            </Stack>
             <Drawer anchor="top" open={open} onClose={toggleDrawer(false)}>
               <Box sx={{ p: 2, backgroundColor: "background.default" }}>
                 <Box
@@ -118,19 +211,59 @@ export default function AppAppBar() {
                   </IconButton>
                 </Box>
                 <Divider sx={{ my: 3 }} />
-                <MenuItem>Features</MenuItem>
-                <MenuItem>Testimonials</MenuItem>
-                <MenuItem>Highlights</MenuItem>
-                <MenuItem>Pricing</MenuItem>
-                <MenuItem>FAQ</MenuItem>
-                <MenuItem>Blog</MenuItem>
+                <MenuItem variant="text" color="info" size="small">
+                  Trending
+                  <LocalFireDepartmentIcon
+                    sx={{
+                      fontSize: "18px",
+                      marginLeft: "9px",
+                      color: "#ff0039",
+                    }}
+                  />
+                </MenuItem>
+                <MenuItem variant="text" color="info" size="small">
+                  Write
+                  <CreateOutlinedIcon
+                    sx={{ fontSize: "18px", marginLeft: "9px" }}
+                  />
+                </MenuItem>
+                <MenuItem variant="text" color="info" size="small">
+                  Following
+                  <PeopleAltOutlinedIcon
+                    sx={{ fontSize: "18px", marginLeft: "9px" }}
+                  />
+                </MenuItem>
+
+                <MenuItem
+                  variant="text"
+                  color="info"
+                  size="small"
+                  sx={{ minWidth: 0 }}
+                >
+                  FAQ
+                  <QuizOutlinedIcon
+                    sx={{ fontSize: "18px", marginLeft: "9px" }}
+                  />
+                </MenuItem>
                 <MenuItem>
-                  <Button color="primary" variant="contained" fullWidth>
+                  <Button
+                    component={Link}
+                    to="/signup"
+                    color="primary"
+                    variant="contained"
+                    fullWidth
+                  >
                     Sign up
                   </Button>
                 </MenuItem>
                 <MenuItem>
-                  <Button color="primary" variant="outlined" fullWidth>
+                  <Button
+                    component={Link}
+                    to="/signin"
+                    color="primary"
+                    variant="outlined"
+                    fullWidth
+                  >
                     Sign in
                   </Button>
                 </MenuItem>
