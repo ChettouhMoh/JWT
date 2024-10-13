@@ -11,6 +11,11 @@ import MenuItem from "@mui/material/MenuItem";
 import Drawer from "@mui/material/Drawer";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
+import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
+import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
+import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlined";
+import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: "flex",
@@ -50,17 +55,24 @@ export default function AppAppBar() {
           >
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
               <Button variant="text" color="info" size="small">
-                Features
+                Trending
+                <LocalFireDepartmentIcon
+                  sx={{ fontSize: "18px", marginLeft: "4px", color: "#ff0039" }}
+                />
               </Button>
               <Button variant="text" color="info" size="small">
-                Testimonials
+                Write
+                <CreateOutlinedIcon
+                  sx={{ fontSize: "18px", marginLeft: "4px" }}
+                />
               </Button>
               <Button variant="text" color="info" size="small">
-                Highlights
+                Following
+                <PeopleAltOutlinedIcon
+                  sx={{ fontSize: "18px", marginLeft: "4px" }}
+                />
               </Button>
-              <Button variant="text" color="info" size="small">
-                Pricing
-              </Button>
+
               <Button
                 variant="text"
                 color="info"
@@ -68,14 +80,9 @@ export default function AppAppBar() {
                 sx={{ minWidth: 0 }}
               >
                 FAQ
-              </Button>
-              <Button
-                variant="text"
-                color="info"
-                size="small"
-                sx={{ minWidth: 0 }}
-              >
-                Blog
+                <QuizOutlinedIcon
+                  sx={{ fontSize: "18px", marginLeft: "4px" }}
+                />
               </Button>
             </Box>
           </Box>
