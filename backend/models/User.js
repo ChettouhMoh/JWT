@@ -6,6 +6,7 @@ const userSchema = new Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   role: { type: String, required: true },
+  img: { type: String, default: "" },
   bio: { type: String },
   followers: [{ type: Schema.Types.ObjectId, ref: "User" }], // List of users following this user
   following: [{ type: Schema.Types.ObjectId, ref: "User" }], // List of users this user is following
