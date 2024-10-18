@@ -28,7 +28,7 @@ export const loginUser = createAsyncThunk(
 );
 
 const initialState = {
-  user: null,
+  user: false,
   loading: false,
   error: null,
   accessToken: null,
@@ -54,8 +54,10 @@ const authSlice = createSlice({
     });
     builder.addCase(registerUser.fulfilled, (state, action) => {
       state.loading = false;
-      state.user = action.payload.user;
-      state.accessToken = action.payload.accessToken;
+      // state.user = action.payload.user;
+      // state.accessToken = action.payload.accessToken;
+      localStorage.setItem("accessToken", action.payload.accessToken);
+      localStorage.setItem("user", JSON.stringify(action.payload.user));
     });
     builder.addCase(registerUser.rejected, (state, action) => {
       state.loading = false;
@@ -69,8 +71,8 @@ const authSlice = createSlice({
     });
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.loading = false;
-      state.user = action.payload.user;
-      state.accessToken = action.payload.accessToken;
+      localStorage.setItem("accessToken", action.payload.accessToken);
+      localStorage.setItem("user", JSON.stringify(action.payload.user));
     });
     builder.addCase(loginUser.rejected, (state, action) => {
       state.loading = false;

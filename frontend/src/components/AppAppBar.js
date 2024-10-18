@@ -17,7 +17,7 @@ import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Avatar from "@mui/material/Avatar";
 import { Stack } from "@mui/material";
@@ -40,7 +40,14 @@ export default function AppAppBar() {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error, user } = useSelector((state) => state.auth);
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+
+  useEffect(() => {
+    if (!user) {
+      // Dispatch an action to validate token and fetch user info
+      // dispatch(fetchUserData(localStorage.getItem("accessToken")));
+    }
+  }, []);
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
@@ -101,7 +108,7 @@ export default function AppAppBar() {
               alignItems: "center",
             }}
           >
-            {user ? (
+            {!!user ? (
               <>
                 <Button
                   variant="text"
@@ -109,12 +116,12 @@ export default function AppAppBar() {
                   size="small"
                   sx={{ minWidth: 0 }}
                 >
-                  Mohamed, C
+                  {user.username}
                 </Button>
                 <Link to="/profile" style={{ textDecoration: "none" }}>
                   <Avatar
                     alt={user.username}
-                    src=""
+                    src="../static/images/avatar_img.jpg"
                     sx={{
                       width: 36,
                       height: 36,
@@ -175,12 +182,12 @@ export default function AppAppBar() {
                 size="small"
                 sx={{ minWidth: 0 }}
               >
-                Mohamed, C
+                {user.username}
               </Button>
               <Link to="/profile" style={{ textDecoration: "none" }}>
                 <Avatar
                   alt={user.username}
-                  src=""
+                  src="../static/images/avatar_img.jpg"
                   sx={{
                     width: 36,
                     height: 36,

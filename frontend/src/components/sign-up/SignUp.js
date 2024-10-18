@@ -76,7 +76,7 @@ export default function SignUp() {
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error, user } = useSelector((state) => state.auth);
+  const { loading, error } = useSelector((state) => state.auth);
 
   // This code only runs on the client side, to determine the system color preference
   React.useEffect(() => {

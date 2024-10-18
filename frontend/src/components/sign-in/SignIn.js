@@ -15,7 +15,7 @@ import MuiCard from "@mui/material/Card";
 import ForgotPassword from "./ForgotPassword";
 import getSignUpTheme from "../sign-up/theme/getSignUpTheme";
 import TemplateFrame from "../sign-up/TemplateFrame";
-import { GoogleIcon, FacebookIcon, SitemarkIcon } from "./CustomIcons";
+import { GoogleIcon, FacebookIcon } from "./CustomIcons";
 import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -74,7 +74,7 @@ export default function SignIn(props) {
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error, user } = useSelector((state) => state.auth);
+  const { loading, error } = useSelector((state) => state.auth);
 
   // This code only runs on the client side, to determine the system color preference
   React.useEffect(() => {
