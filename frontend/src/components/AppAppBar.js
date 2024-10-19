@@ -17,10 +17,12 @@ import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import Avatar from "@mui/material/Avatar";
 import { Stack } from "@mui/material";
+import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import { logoutUser } from "../rtk/slices/user-reducer";
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: "flex",
@@ -42,13 +44,6 @@ export default function AppAppBar() {
   const navigate = useNavigate();
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
 
-  useEffect(() => {
-    if (!user) {
-      // Dispatch an action to validate token and fetch user info
-      // dispatch(fetchUserData(localStorage.getItem("accessToken")));
-    }
-  }, []);
-
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
@@ -69,23 +64,45 @@ export default function AppAppBar() {
             sx={{ flexGrow: 1, display: "flex", alignItems: "center", px: 0 }}
           >
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
-              <Button variant="text" color="info" size="small">
+              <Button
+                variant="text"
+                color="info"
+                size="small"
+                startIcon={
+                  <LocalFireDepartmentIcon
+                    sx={{
+                      fontSize: "18px",
+                      marginLeft: "4px",
+                      color: "#ff0039",
+                    }}
+                  />
+                }
+              >
                 Trending
-                <LocalFireDepartmentIcon
-                  sx={{ fontSize: "18px", marginLeft: "4px", color: "#ff0039" }}
-                />
               </Button>
-              <Button variant="text" color="info" size="small">
+              <Button
+                variant="text"
+                color="info"
+                size="small"
+                startIcon={
+                  <CreateOutlinedIcon
+                    sx={{ fontSize: "18px", marginLeft: "4px" }}
+                  />
+                }
+              >
                 Write
-                <CreateOutlinedIcon
-                  sx={{ fontSize: "18px", marginLeft: "4px" }}
-                />
               </Button>
-              <Button variant="text" color="info" size="small">
+              <Button
+                variant="text"
+                color="info"
+                size="small"
+                startIcon={
+                  <PeopleAltOutlinedIcon
+                    sx={{ fontSize: "18px", marginLeft: "4px" }}
+                  />
+                }
+              >
                 Following
-                <PeopleAltOutlinedIcon
-                  sx={{ fontSize: "18px", marginLeft: "4px" }}
-                />
               </Button>
 
               <Button
@@ -93,11 +110,13 @@ export default function AppAppBar() {
                 color="info"
                 size="small"
                 sx={{ minWidth: 0 }}
+                startIcon={
+                  <QuizOutlinedIcon
+                    sx={{ fontSize: "18px", marginLeft: "4px" }}
+                  />
+                }
               >
                 FAQ
-                <QuizOutlinedIcon
-                  sx={{ fontSize: "18px", marginLeft: "4px" }}
-                />
               </Button>
             </Box>
           </Box>
@@ -108,8 +127,28 @@ export default function AppAppBar() {
               alignItems: "center",
             }}
           >
-            {!!user ? (
+            {user ? (
               <>
+                <Button
+                  variant="text"
+                  color="info"
+                  size="small"
+                  sx={{ minWidth: 0 }}
+                  onClick={async () => {
+                    try {
+                      // console.log("before");
+                      const res = await dispatch(logoutUser());
+                      console.log("after", res);
+                      if (res.type === "auth/logoutUser/fulfilled") {
+                        navigate("/");
+                      }
+                    } catch (error) {
+                      console.error(`Error: ${error}`);
+                    }
+                  }}
+                >
+                  <LogoutRoundedIcon />
+                </Button>
                 <Button
                   variant="text"
                   color="info"
@@ -175,35 +214,37 @@ export default function AppAppBar() {
             <IconButton aria-label="Menu button" onClick={toggleDrawer(true)}>
               <MenuIcon />
             </IconButton>
-            <Stack direction="row" spacing={2}>
-              <Button
-                variant="text"
-                color="info"
-                size="small"
-                sx={{ minWidth: 0 }}
-              >
-                {user.username}
-              </Button>
-              <Link to="/profile" style={{ textDecoration: "none" }}>
-                <Avatar
-                  alt={user.username}
-                  src="../static/images/avatar_img.jpg"
-                  sx={{
-                    width: 36,
-                    height: 36,
-                    transition: "box-shadow 0.3s ease-in-out",
-                    "&:hover": {
-                      boxShadow: (theme) =>
-                        `0 2px 14px ${
-                          theme.palette.mode === "dark"
-                            ? "rgba(255, 255, 255, 0.2)"
-                            : "rgba(0, 0, 0, 0.2)"
-                        }`,
-                    },
-                  }}
-                />
-              </Link>
-            </Stack>
+            {user ? (
+              <Stack direction="row" spacing={2}>
+                <Button
+                  variant="text"
+                  color="info"
+                  size="small"
+                  sx={{ minWidth: 0 }}
+                >
+                  {user.username}
+                </Button>
+                <Link to="/profile" style={{ textDecoration: "none" }}>
+                  <Avatar
+                    alt={user.username}
+                    src="../static/images/avatar_img.jpg"
+                    sx={{
+                      width: 36,
+                      height: 36,
+                      transition: "box-shadow 0.3s ease-in-out",
+                      "&:hover": {
+                        boxShadow: (theme) =>
+                          `0 2px 14px ${
+                            theme.palette.mode === "dark"
+                              ? "rgba(255, 255, 255, 0.2)"
+                              : "rgba(0, 0, 0, 0.2)"
+                          }`,
+                      },
+                    }}
+                  />
+                </Link>
+              </Stack>
+            ) : null}
             <Drawer anchor="top" open={open} onClose={toggleDrawer(false)}>
               <Box sx={{ p: 2, backgroundColor: "background.default" }}>
                 <Box
@@ -252,28 +293,52 @@ export default function AppAppBar() {
                     sx={{ fontSize: "18px", marginLeft: "9px" }}
                   />
                 </MenuItem>
-                <MenuItem>
-                  <Button
-                    component={Link}
-                    to="/signup"
-                    color="primary"
-                    variant="contained"
-                    fullWidth
-                  >
-                    Sign up
-                  </Button>
-                </MenuItem>
-                <MenuItem>
-                  <Button
-                    component={Link}
-                    to="/signin"
-                    color="primary"
-                    variant="outlined"
-                    fullWidth
-                  >
-                    Sign in
-                  </Button>
-                </MenuItem>
+                {user ? (
+                  <MenuItem>
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      fullWidth
+                      onClick={async () => {
+                        try {
+                          const res = await dispatch(logoutUser());
+                          if (res.type === "auth/logoutUser/fulfilled") {
+                            navigate("/");
+                          }
+                        } catch (error) {
+                          console.error(`Error: ${error}`);
+                        }
+                      }}
+                    >
+                      Logout
+                    </Button>
+                  </MenuItem>
+                ) : (
+                  <>
+                    <MenuItem>
+                      <Button
+                        component={Link}
+                        to="/signup"
+                        color="primary"
+                        variant="contained"
+                        fullWidth
+                      >
+                        Sign up
+                      </Button>
+                    </MenuItem>
+                    <MenuItem>
+                      <Button
+                        component={Link}
+                        to="/signin"
+                        color="primary"
+                        variant="outlined"
+                        fullWidth
+                      >
+                        Sign in
+                      </Button>
+                    </MenuItem>
+                  </>
+                )}
               </Box>
             </Drawer>
           </Box>

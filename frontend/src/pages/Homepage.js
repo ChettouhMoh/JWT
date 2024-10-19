@@ -7,14 +7,16 @@ import MainContent from "../components/MainContent";
 import Latest from "../components/Latest";
 import Footer from "../components/Footer";
 import TemplateFrame from "../components/sign-up/TemplateFrame";
-
+import { useSelector } from "react-redux";
 import getBlogTheme from "../components/sign-up/theme/getSignUpTheme";
+import HomepageSkeleton from "../components/HomepageSkeleton";
 
 const Homepage = () => {
   const [mode, setMode] = React.useState("light");
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
   const blogTheme = createTheme(getBlogTheme(mode));
   const defaultTheme = createTheme({ palette: { mode } });
+  const { msg, error, loading } = useSelector((state) => state.auth);
 
   // This code only runs on the client side, to determine the system color preference
   React.useEffect(() => {
@@ -50,16 +52,22 @@ const Homepage = () => {
     >
       <ThemeProvider theme={showCustomTheme ? blogTheme : defaultTheme}>
         <CssBaseline enableColorScheme />
-        <AppAppBar />
-        <Container
-          maxWidth="lg"
-          component="main"
-          sx={{ display: "flex", flexDirection: "column", my: 16, gap: 4 }}
-        >
-          <MainContent />
-          <Latest />
-        </Container>
-        <Footer />
+        {loading ? (
+          <HomepageSkeleton />
+        ) : (
+          <>
+            <AppAppBar />
+            <Container
+              maxWidth="lg"
+              component="main"
+              sx={{ display: "flex", flexDirection: "column", my: 16, gap: 4 }}
+            >
+              <MainContent />
+              <Latest />
+            </Container>
+            <Footer />
+          </>
+        )}
       </ThemeProvider>
     </TemplateFrame>
   );

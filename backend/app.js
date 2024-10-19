@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 
 var corsOptions = {
   origin: "http://localhost:3000",
+  credentials: true,
 };
 
 const app = express();

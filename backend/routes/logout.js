@@ -6,11 +6,10 @@ const RefreshToken = require("../models/RefreshToken.model");
 router.post("/logout", async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
-
     await RefreshToken.deleteOne({ refreshToken });
 
     res.clearCookie("refreshToken");
-    return res.status(204).json({ msg: "logout succeed" });
+    return res.status(201).json({ msg: "logout succeed" });
   } catch (error) {
     return res.json({ error: `Error: ${error}` });
   }

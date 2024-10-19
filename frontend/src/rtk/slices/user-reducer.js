@@ -27,21 +27,32 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+// logout user
+export const logoutUser = createAsyncThunk("auth/logoutUser", async () => {
+  try {
+    const response = await axios.post("/logout", {}, { withCredentials: true });
+    return response.data;
+  } catch (error) {
+    return `error: ${error}`;
+  }
+});
+
 const initialState = {
   user: false,
   loading: false,
   error: null,
   accessToken: null,
+  msg: null,
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    logout: (state) => {
-      state.user = null;
-      state.accessToken = null;
-    },
+    // logout: (state) => {
+    //   localStorage.removeItem("user");
+    //   localStorage.removeItem("accessToken");
+    // },
     updateAccessToken: (state, action) => {
       state.accessToken = action.payload;
     },
@@ -54,8 +65,6 @@ const authSlice = createSlice({
     });
     builder.addCase(registerUser.fulfilled, (state, action) => {
       state.loading = false;
-      // state.user = action.payload.user;
-      // state.accessToken = action.payload.accessToken;
       localStorage.setItem("accessToken", action.payload.accessToken);
       localStorage.setItem("user", JSON.stringify(action.payload.user));
     });
@@ -77,6 +86,23 @@ const authSlice = createSlice({
     builder.addCase(loginUser.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload || "Login failed";
+    });
+
+    // Logout
+    builder.addCase(logoutUser.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(logoutUser.fulfilled, (state, action) => {
+      state.loading = false;
+      state.msg = action.payload.msg;
+      console.log(action.payload);
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("user");
+    });
+    builder.addCase(logoutUser.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload || "Logout failed";
     });
   },
 });
