@@ -16,8 +16,8 @@ const Homepage = () => {
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
   const blogTheme = createTheme(getBlogTheme(mode));
   const defaultTheme = createTheme({ palette: { mode } });
-  const { msg, error, loading } = useSelector((state) => state.auth);
-
+  // const { msg, error, loading } = useSelector((state) => state.auth);
+  const [loading, setLoading] = React.useState(true);
   // This code only runs on the client side, to determine the system color preference
   React.useEffect(() => {
     // Check if there is a preferred mode in localStorage
