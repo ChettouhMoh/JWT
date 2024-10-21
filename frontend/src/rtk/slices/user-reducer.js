@@ -87,7 +87,7 @@ const authSlice = createSlice({
     builder.addCase(loginUser.rejected, (state, action) => {
       state.loading = false;
       state.msg = false;
-      state.error = action.payload || "Login failed";
+      state.error = action.payload || { error: "Login Failed" };
     });
 
     // Logout
@@ -105,7 +105,7 @@ const authSlice = createSlice({
     builder.addCase(logoutUser.rejected, (state, action) => {
       state.loading = false;
       state.msg = false;
-      state.error = action.payload || "Logout failed";
+      state.error = action.payload || { error: "Logout failed" };
     });
   },
 });

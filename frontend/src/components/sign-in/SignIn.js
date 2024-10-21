@@ -22,8 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { loginUser } from "../../rtk/slices/user-reducer";
-import Alert from "../Alert";
-
+import ErrorAlert from "../ErrorAlert";
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
@@ -159,8 +158,13 @@ export default function SignIn(props) {
     >
       <ThemeProvider theme={showCustomTheme ? SignUpTheme : defaultTheme}>
         <CssBaseline enableColorScheme />
-        <SignInContainer direction="column" justifyContent="space-between">
-          <Card variant="outlined">
+        <SignInContainer
+          direction="column"
+          justifyContent="space-between"
+          // sx={{ paddingBottom: 12 }}
+          // height={100}
+        >
+          <Card variant="outlined" sx={{ marginBottom: 4 }}>
             <Typography
               component="h1"
               variant="h4"
@@ -287,9 +291,7 @@ export default function SignIn(props) {
                 Sign in with Facebook
               </Button>
             </Box>
-            {error && (
-              <Alert severity="error" title="Error: " message={error.error} />
-            )}
+            {error && <ErrorAlert message={error.error} />}
           </Card>
         </SignInContainer>
       </ThemeProvider>

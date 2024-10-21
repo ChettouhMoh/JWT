@@ -14,7 +14,7 @@ export const SucceedAlert = ({ message }) => {
 
   const styles = {
     position: "fixed",
-    bottom: "20px",
+    bottom: "75px",
     right: "20px",
     zIndex: 9999,
     width: "300px",

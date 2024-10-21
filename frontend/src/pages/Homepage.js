@@ -10,8 +10,8 @@ import TemplateFrame from "../components/sign-up/TemplateFrame";
 import { useSelector } from "react-redux";
 import getBlogTheme from "../components/sign-up/theme/getSignUpTheme";
 import HomepageSkeleton from "../components/HomepageSkeleton";
-
 import { SucceedAlert } from "../components/SucceedAlert";
+import ErrorAlert from "../components/ErrorAlert";
 
 const Homepage = () => {
   const blogTheme = createTheme(getBlogTheme("dark"));
@@ -20,12 +20,7 @@ const Homepage = () => {
   console.log(msg);
 
   return (
-    <TemplateFrame
-      // toggleCustomTheme={toggleCustomTheme}
-      // showCustomTheme={showCustomTheme}
-      mode={"dark"}
-      // toggleColorMode={toggleColorMode}
-    >
+    <TemplateFrame mode={"dark"}>
       <ThemeProvider theme={blogTheme}>
         <CssBaseline enableColorScheme />
         {loading ? (
@@ -48,15 +43,15 @@ const Homepage = () => {
               <Latest />
             </Container>
             <Footer />
-
-            <SucceedAlert />
           </>
         )}
         {!!msg ? (
           <SucceedAlert message={msg} />
-        ) : (
-          <SucceedAlert message={"Welcome !"} />
-        )}
+        ) : null
+        // <SucceedAlert message={"Welcome !"} />
+        }
+
+        {!!error ? <ErrorAlert message={error} /> : null}
       </ThemeProvider>
     </TemplateFrame>
   );
