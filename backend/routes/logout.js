@@ -9,7 +9,7 @@ router.post("/logout", async (req, res) => {
     await RefreshToken.deleteOne({ refreshToken });
 
     res.clearCookie("refreshToken");
-    return res.status(201).json({ msg: "logout succeed" });
+    return res.status(201);
   } catch (error) {
     return res.json({ error: `Error: ${error}` });
   }

@@ -42,17 +42,13 @@ const initialState = {
   loading: false,
   error: null,
   accessToken: null,
-  msg: null,
+  msg: false,
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    // logout: (state) => {
-    //   localStorage.removeItem("user");
-    //   localStorage.removeItem("accessToken");
-    // },
     updateAccessToken: (state, action) => {
       state.accessToken = action.payload;
     },
@@ -61,47 +57,54 @@ const authSlice = createSlice({
     // Register
     builder.addCase(registerUser.pending, (state) => {
       state.loading = true;
+      state.msg = false;
       state.error = null;
     });
     builder.addCase(registerUser.fulfilled, (state, action) => {
       state.loading = false;
+      state.msg = `Welcome! ${action.payload.user.username.split(" ")[0]}`;
       localStorage.setItem("accessToken", action.payload.accessToken);
       localStorage.setItem("user", JSON.stringify(action.payload.user));
     });
     builder.addCase(registerUser.rejected, (state, action) => {
       state.loading = false;
+      state.msg = false;
       state.error = action.payload || { error: "Registration failed" };
     });
 
     // Login
     builder.addCase(loginUser.pending, (state) => {
       state.loading = true;
+      state.msg = false;
       state.error = null;
     });
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.loading = false;
+      state.msg = `Welcome! ${action.payload.user.username.split(" ")[0]}`;
       localStorage.setItem("accessToken", action.payload.accessToken);
       localStorage.setItem("user", JSON.stringify(action.payload.user));
     });
     builder.addCase(loginUser.rejected, (state, action) => {
       state.loading = false;
+      state.msg = false;
       state.error = action.payload || "Login failed";
     });
 
     // Logout
     builder.addCase(logoutUser.pending, (state) => {
       state.loading = true;
+      state.msg = false;
       state.error = null;
     });
     builder.addCase(logoutUser.fulfilled, (state, action) => {
       state.loading = false;
-      state.msg = action.payload.msg;
-      console.log(action.payload);
+      state.msg = "logout Succeed";
       localStorage.removeItem("accessToken");
       localStorage.removeItem("user");
     });
     builder.addCase(logoutUser.rejected, (state, action) => {
       state.loading = false;
+      state.msg = false;
       state.error = action.payload || "Logout failed";
     });
   },

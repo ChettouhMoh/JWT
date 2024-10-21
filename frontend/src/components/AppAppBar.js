@@ -54,6 +54,7 @@ export default function AppAppBar() {
       sx={{
         boxShadow: 0,
         bgcolor: "transparent",
+
         backgroundImage: "none",
         mt: 10,
       }}

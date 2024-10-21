@@ -11,46 +11,22 @@ import { useSelector } from "react-redux";
 import getBlogTheme from "../components/sign-up/theme/getSignUpTheme";
 import HomepageSkeleton from "../components/HomepageSkeleton";
 
+import { SucceedAlert } from "../components/SucceedAlert";
+
 const Homepage = () => {
-  const [mode, setMode] = React.useState("light");
-  const [showCustomTheme, setShowCustomTheme] = React.useState(true);
-  const blogTheme = createTheme(getBlogTheme(mode));
-  const defaultTheme = createTheme({ palette: { mode } });
-  // const { msg, error, loading } = useSelector((state) => state.auth);
-  const [loading, setLoading] = React.useState(true);
-  // This code only runs on the client side, to determine the system color preference
-  React.useEffect(() => {
-    // Check if there is a preferred mode in localStorage
-    const savedMode = localStorage.getItem("themeMode");
-    if (savedMode) {
-      setMode(savedMode);
-    } else {
-      // If no preference is found, it uses system preference
-      const systemPrefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
-      setMode(systemPrefersDark ? "dark" : "light");
-    }
-  }, []);
+  const blogTheme = createTheme(getBlogTheme("dark"));
 
-  const toggleColorMode = () => {
-    const newMode = mode === "dark" ? "light" : "dark";
-    setMode(newMode);
-    localStorage.setItem("themeMode", newMode); // Save the selected mode to localStorage
-  };
-
-  const toggleCustomTheme = () => {
-    setShowCustomTheme((prev) => !prev);
-  };
+  const { msg, error, loading } = useSelector((state) => state.auth);
+  console.log(msg);
 
   return (
     <TemplateFrame
-      toggleCustomTheme={toggleCustomTheme}
-      showCustomTheme={showCustomTheme}
-      mode={mode}
-      toggleColorMode={toggleColorMode}
+      // toggleCustomTheme={toggleCustomTheme}
+      // showCustomTheme={showCustomTheme}
+      mode={"dark"}
+      // toggleColorMode={toggleColorMode}
     >
-      <ThemeProvider theme={showCustomTheme ? blogTheme : defaultTheme}>
+      <ThemeProvider theme={blogTheme}>
         <CssBaseline enableColorScheme />
         {loading ? (
           <HomepageSkeleton />
@@ -60,13 +36,26 @@ const Homepage = () => {
             <Container
               maxWidth="lg"
               component="main"
-              sx={{ display: "flex", flexDirection: "column", my: 16, gap: 4 }}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                my: 16,
+                gap: 4,
+                marginTop: 23,
+              }}
             >
               <MainContent />
               <Latest />
             </Container>
             <Footer />
+
+            <SucceedAlert />
           </>
+        )}
+        {!!msg ? (
+          <SucceedAlert message={msg} />
+        ) : (
+          <SucceedAlert message={"Welcome !"} />
         )}
       </ThemeProvider>
     </TemplateFrame>
