@@ -75,21 +75,6 @@ export default function SignIn(props) {
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.auth);
 
-  // This code only runs on the client side, to determine the system color preference
-  React.useEffect(() => {
-    // Check if there is a preferred mode in localStorage
-    const savedMode = localStorage.getItem("themeMode");
-    if (savedMode) {
-      setMode(savedMode);
-    } else {
-      // If no preference is found, it uses system preference
-      const systemPrefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
-      setMode(systemPrefersDark ? "dark" : "light");
-    }
-  }, []);
-
   const handleClickOpen = () => {
     setOpen(true);
   };
