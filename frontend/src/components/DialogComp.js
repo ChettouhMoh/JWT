@@ -131,11 +131,12 @@ const AddPostDialog = ({ openDialog, handleClose }) => {
             border: "none",
             borderBottom: "1px solid #292828",
             width: "100%",
-            height: "30px",
+            height: "40px",
+            maxHeight: "100px",
             background: "none",
             marginBottom: "80px",
             resize: "none",
-            overflow: "hidden",
+            overflow: "auto",
           }}
           onInput={(e) => {
             e.target.style.height = "auto";

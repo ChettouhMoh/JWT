@@ -23,7 +23,28 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+textarea {
+  overflow-y: auto;
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: rgb(88, 87, 87) transparent; /* For Firefox */
+}
 
+textarea::-webkit-scrollbar {
+  width: 20px;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background-color: rgb(88, 87, 87);
+  border-radius: 30px;
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  -ms-border-radius: 30px;
+  -o-border-radius: 30px;
+}
+
+textarea::-webkit-scrollbar-track {
+  background: transparent;
+}
 .App-link {
   color: #61dafb;
 }

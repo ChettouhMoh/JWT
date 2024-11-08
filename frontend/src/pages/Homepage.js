@@ -19,6 +19,9 @@ import EditIcon from "@mui/icons-material/Edit";
 const Homepage = () => {
   const blogTheme = createTheme(getBlogTheme("dark"));
   const [openDialog, setOpenDialog] = React.useState(false);
+  const [user, setUser] = React.useState(
+    JSON.parse(localStorage.getItem("user"))
+  );
   const { msg, error, loading } = useSelector((state) => state.auth);
 
   const handleClickOpen = () => {
@@ -55,23 +58,25 @@ const Homepage = () => {
             <Footer />
           </>
         )}
-        <Fab
-          color="default"
-          aria-label="edit"
-          sx={{
-            position: "fixed",
-            bottom: 26,
-            right: 26,
-            backgroundColor: "#00bcd4",
-            color: "#fff",
-            "&:hover": {
-              backgroundColor: "#0097a7",
-            },
-          }}
-          onClick={handleClickOpen}
-        >
-          <EditIcon />
-        </Fab>
+        {!!user ? (
+          <Fab
+            color="default"
+            aria-label="edit"
+            sx={{
+              position: "fixed",
+              bottom: 26,
+              right: 26,
+              backgroundColor: "#00bcd4",
+              color: "#fff",
+              "&:hover": {
+                backgroundColor: "#0097a7",
+              },
+            }}
+            onClick={handleClickOpen}
+          >
+            <EditIcon />
+          </Fab>
+        ) : null}
         {openDialog ? (
           <AddPostDialog openDialog={openDialog} handleClose={handleClose} />
         ) : null}
